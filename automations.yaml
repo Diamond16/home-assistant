@@ -1,0 +1,18 @@
+- alias: "Sensors update"
+  trigger:
+  - platform: time_pattern
+    seconds: "/60"
+  condition: []
+  action:
+  - service: mqtt.publish
+    data: 
+      payload: "get:14"
+      topic: megad/14/cmd
+  - service: mqtt.publish
+    data: 
+      payload: "get:30"
+      topic: megad/14/cmd
+  - service: mqtt.publish
+    data: 
+      payload: "get:31"
+      topic: megad/14/cmd

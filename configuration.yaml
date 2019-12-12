@@ -1,0 +1,236 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+####################################################
+#                                                  #
+#           MegaD MQTT response exapmples          #
+#                                                  #
+####################################################
+#OUT port
+#{"port":7,"value":"OFF"}
+#{"port":7,"value":"ON"}
+
+#I2C port
+#bmx280 sensor
+#{"port":30,"value":{"temp":23.64,"press":729.86,"hum":38.556}}
+#htu21d sensor
+#{"port":31,"value":{"temp":23.96, "hum":43.71}}
+
+#DSen port
+#{"port":14,"value":"temp:23.62"}
+
+####################################################
+#                                                  #
+#           MegaD MQTT command exapmples           #
+#                                                  #
+####################################################
+#topic megad/14/cmd
+#{"port":8,"value":"OFF"}
+#{"port":8,"value":"ON"}
+#{"port":14}
+
+
+####################################################
+#                                                  #
+#                    sensor                        #
+#                                                  #
+####################################################
+mqtt:
+  broker: 192.168.0.10
+
+sensor:
+#  - platform: command_line
+#    name: "Освещенность улицы"
+#    command: "/usr/bin/curl -X GET 'http://192.168.8.7/sec/?pt=0&scl=1&i2c_dev=max44009'"
+#    value_template: '{{ (value|float) | round(1) }}'
+#    scan_interval: 300
+  - platform: mqtt
+    name: "Температура p30 bmx280"
+    device_class: temperature
+    state_topic: "megad/14/30"
+    value_template: '{{ value_json.value.temp }}'
+    unit_of_measurement: "°C"
+    force_update: on
+  - platform: mqtt
+    name: "Давление p30 bmx280"
+    device_class: pressure
+    state_topic: "megad/14/30"
+    value_template: '{{ value_json.value.press }}'
+    unit_of_measurement: "hPa"
+    force_update: on
+  - platform: mqtt
+    name: "Влажность p30 bmx280"
+    device_class: humidity
+    state_topic: "megad/14/30"
+    value_template: '{{ value_json.value.hum }}'
+    unit_of_measurement: "%"
+    force_update: on      
+
+  - platform: mqtt
+    name: "Температура p31 htu21d"
+    device_class: temperature
+    state_topic: "megad/14/31"
+    value_template: '{{ value_json.value.temp }}'
+    unit_of_measurement: "°C"
+    force_update: on
+  - platform: mqtt
+    name: "Влажность p31 htu21d"
+    device_class: humidity
+    state_topic: "megad/14/31"
+    value_template: '{{ value_json.value.hum }}'
+    unit_of_measurement: "%"
+    force_update: on    
+  
+  - platform: mqtt
+    name: ds18b20wp
+    device_class: temperature
+    state_topic: "megad/14/14"
+    value_template: '{{ value_json.value[5:] }}'
+    unit_of_measurement: "°C"
+    force_update: on
+
+#  - platform: mqtt
+#    name: "Темп. кухня"
+#    device_class: temperature
+#    state_topic: "megad/14/7"
+#    value_template: >- #еще вариант: https://community.home-assistant.io/t/trigger-numeric-state-below-value-not-firing/28911
+#      {%- if value_json.value.ff4902731604|float >= 0 and value_json.value.ff4902731604|float <= 70 -%}
+#      {{ value_json.value.ff4902731604 | round(1) }}
+#      {%- else -%}
+#      nan
+#      {%- endif -%}
+#    unit_of_measurement: "°C"
+#  - platform: mqtt
+#    name: "Датчик шума"
+#    device_class: signal_strength
+#    state_topic: "megad/14/36"
+#    value_template: "{{ (value_json.value|float/1023*3.3*50) | round(1) }}"    
+#    unit_of_measurement: "dBA"
+
+####################################################
+#                                                  #
+#                    binary_sensor                 #
+#                                                  #
+####################################################
+  
+#binary_sensor:
+#  - platform: mqtt
+#    name: "Входная дверь"
+#    device_class: door
+#    state_topic: "megad/14/5"
+#    value_template: "{{ value_json.value }}"
+#    qos: 1
+#    payload_on: "OFF"
+#    payload_off: "ON"
+
+####################################################
+#                                                  #
+#                    light                        #
+#                                                  #
+####################################################
+
+#light:
+#  - platform: mqtt
+#    name: "Туалет"
+#    state_topic: "stat/ElectroDragon1/RESULT"
+#    value_template: "{{ value_json.POWER1 }}"
+#    command_topic: "cmnd/ElectroDragon1/POWER1"
+#    availability_topic: "tele/ElectroDragon1/LWT"
+#    qos: 1
+#    payload_on: "ON"
+#    payload_off: "OFF"
+#    payload_available: "Online"
+#    payload_not_available: "Offline"
+
+####################################################
+#                                                  #
+#                    switch                        #
+#                                                  #
+####################################################
+
+switch:
+  - platform: mqtt
+    name: heater
+    icon: "mdi:radiator"
+    state_topic: "megad/14/7"
+    value_template: "{{ value_json.value }}"
+    command_topic: "megad/14/cmd"
+    payload_on: "7:1"
+    payload_off: "7:0"
+    state_on: "ON"
+    state_off: "OFF"
+
+climate:
+  - platform: generic_thermostat
+    name: termostat
+    heater: switch.heater
+    target_sensor: sensor.ds18b20wp
+    min_temp: 7
+    max_temp: 30
+    min_cycle_duration:
+      minutes: 20
+    cold_tolerance: 3
+    hot_tolerance: 2
+    precision: 0.5
+    initial_hvac_mode: "heat"
+
+# sensor:
+#   - platform: rest
+#     name: room_sensors
+#     resource: http://<address_to_rest_service>
+#     json_attributes:
+#       - bedroom1
+#       - bedroom2
+#       - bedroom3
+#     value_template: 'OK'
+#   - platform: template
+#     sensors:
+#       bedroom1_temperature:
+#         value_template: '{{ states.sensor.room_sensors.attributes["bedroom1"]["temperature"] }}'
+#         device_class: temperature
+#         unit_of_measurement: '°C'
+#       bedroom1_humidity:
+#         value_template: '{{ states.sensor.room_sensors.attributes["bedroom1"]["humidity"] }}'
+#         device_class: humidity
+#         unit_of_measurement: '%'
+#       bedroom1_battery:
+#         value_template: '{{ states.sensor.room_sensors.attributes["bedroom1"]["battery"] }}'
+#         device_class: battery
+#         unit_of_measurement: 'V'
+#       bedroom2_temperature:
+#         value_template: '{{ states.sensor.room_sensors.attributes["bedroom2"]["temperature"] }}'
+#         device_class: temperature
+#         unit_of_measurement: '°C'
+
+#customize:
+    # Add an entry for each entity that you want to overwrite.
+    #sensor.ds18b20wp:
+    #  friendly_name: "Температура p14 DS18B20-WP"
+    #switch.heater:
+    #  friendly_name: "Конвектор"
+    #  assumed_state: false
+    #thermostat.family_room:
+    #  entity_picture: https://example.com/images/nest.jpg
+    #  friendly_name: Nest
+    #switch.wemo_switch_1:
+    #  friendly_name: Toaster
+    #  entity_picture: /local/toaster.jpg
+    #switch.wemo_switch_2:
+    #  friendly_name: Kitchen kettle
+    #  icon: mdi:kettle
+    #switch.rfxtrx_switch:
+    #  assumed_state: false
