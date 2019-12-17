@@ -49,9 +49,6 @@ scene: !include scenes.yaml
 #                    sensor                        #
 #                                                  #
 ####################################################
-mqtt:
-  broker: 192.168.0.10
-
 sensor:
 #  - platform: command_line
 #    name: "Освещенность улицы"
@@ -183,7 +180,7 @@ climate:
     max_temp: 30
     min_cycle_duration:
       minutes: 20
-    cold_tolerance: 3
+    cold_tolerance: 2
     hot_tolerance: 2
     precision: 0.5
     initial_hvac_mode: "heat"
