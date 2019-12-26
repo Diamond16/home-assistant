@@ -1,3 +1,12 @@
+- alias: "All Sensors update"
+  trigger:
+  - platform: time_pattern
+    seconds: "0"
+  condition: []
+  action:
+  - service: homeassistant.update_entity
+    entity_id: sensor.megad_state
+
 - alias: "Sensors update p14"
   trigger:
   - platform: time_pattern
@@ -30,3 +39,36 @@
     data: 
       payload: "get:31"
       topic: megad/14/cmd
+
+# - alias: 'p3_bmx280_temp_update'
+#     trigger:
+#       - platform: time_pattern
+#         minutes: '/1'
+#     action:
+#       - service: homeassistant.update_entity
+#         entity_id: sensor.p3_bmx280_temp
+
+# - alias: "Update all ports"
+#     trigger:
+#       - platform: time_pattern
+#         seconds: "10"
+#     action:
+#       # - service: downloader.download_file
+#       #   data_template:
+#       #     url: "http://10.8.0.5:304/sec/?cmd=all"
+#       #     filename: "megad.state"
+#       #     overwrite: "true"
+#       - service: homeassistant.update_entity
+#         entity_id: 
+#           - sensor.megad_state
+
+# - initial_state: 'on'
+#   alias: 'Megad hook'
+#   trigger:
+#     - platform: webhook
+#       webhook_id: md
+#   action:
+#     - event: tasker_webhook
+#       event_data_template:
+#         who: "{{ trigger.json.who }}"
+#         what: "{{ trigger.json.what }}"
