@@ -1,4 +1,4 @@
-- alias: "All Sensors update"
+- alias: "MegaD Sensors update"
   trigger:
   - platform: time_pattern
     seconds: "0"
@@ -7,38 +7,38 @@
   - service: homeassistant.update_entity
     entity_id: sensor.megad_state
 
-- alias: "Sensors update p14"
-  trigger:
-  - platform: time_pattern
-    seconds: "10"
-  condition: []
-  action:
-  - service: mqtt.publish
-    data: 
-      payload: "get:14"
-      topic: megad/14/cmd
+# - alias: "Sensors update p14"
+#   trigger:
+#   - platform: time_pattern
+#     seconds: "10"
+#   condition: []
+#   action:
+#   - service: mqtt.publish
+#     data: 
+#       payload: "get:14"
+#       topic: megad/14/cmd
 
-- alias: "Sensors update p30"
-  trigger:
-  - platform: time_pattern
-    seconds: "20"
-  condition: []
-  action:
-  - service: mqtt.publish
-    data: 
-      payload: "get:30"
-      topic: megad/14/cmd
+# - alias: "Sensors update p30"
+#   trigger:
+#   - platform: time_pattern
+#     seconds: "20"
+#   condition: []
+#   action:
+#   - service: mqtt.publish
+#     data: 
+#       payload: "get:30"
+#       topic: megad/14/cmd
 
-- alias: "Sensors update p31"
-  trigger:
-  - platform: time_pattern
-    seconds: "30"
-  condition: []
-  action:
-  - service: mqtt.publish
-    data: 
-      payload: "get:31"
-      topic: megad/14/cmd
+# - alias: "Sensors update p31"
+#   trigger:
+#   - platform: time_pattern
+#     seconds: "30"
+#   condition: []
+#   action:
+#   - service: mqtt.publish
+#     data: 
+#       payload: "get:31"
+#       topic: megad/14/cmd
 
 # - alias: 'p3_bmx280_temp_update'
 #     trigger:
