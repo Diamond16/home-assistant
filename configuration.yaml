@@ -6,6 +6,10 @@ default_config:
 # http:
 #   base_url: example.duckdns.org:8123
 
+homeassistant:
+  whitelist_external_dirs:
+    - /home/fazenda/.homeassistant
+
 # Text to speech
 tts:
   - platform: google_translate
@@ -14,6 +18,9 @@ group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
+
+recorder:
+  purge_keep_days: 365
 
 # downloader:
 #   download_dir: downloads
@@ -68,27 +75,32 @@ scene: !include scenes.yaml
 #                                                  #
 ####################################################
 sensor:
-  - platform: mqtt
-    name: "MQTT Температура p30 bmx280"
-    device_class: temperature
-    state_topic: "megad/14/30"
-    value_template: "{{ value_json.value.temp }}"
-    unit_of_measurement: "°C"
-    force_update: on
-  - platform: mqtt
-    name: "MQTT Давление p30 bmx280"
-    device_class: pressure
-    state_topic: "megad/14/30"
-    value_template: "{{ value_json.value.press }}"
-    unit_of_measurement: "hPa"
-    force_update: on
-  - platform: mqtt
-    name: "MQTT Влажность p30 bmx280"
-    device_class: humidity
-    state_topic: "megad/14/30"
-    value_template: "{{ value_json.value.hum }}"
-    unit_of_measurement: "%"
-    force_update: on      
+  - platform: uptime
+    name: HA Uptime
+  - platform: filesize
+    file_paths:
+      - /home/fazenda/.homeassistant/home-assistant_v2.db
+#   - platform: mqtt
+#     name: "MQTT Температура p30 bmx280"
+#     device_class: temperature
+#     state_topic: "megad/14/30"
+#     value_template: "{{ value_json.value.temp }}"
+#     unit_of_measurement: "°C"
+#     force_update: on
+#   - platform: mqtt
+#     name: "MQTT Давление p30 bmx280"
+#     device_class: pressure
+#     state_topic: "megad/14/30"
+#     value_template: "{{ value_json.value.press }}"
+#     unit_of_measurement: "hPa"
+#     force_update: on
+#   - platform: mqtt
+#     name: "MQTT Влажность p30 bmx280"
+#     device_class: humidity
+#     state_topic: "megad/14/30"
+#     value_template: "{{ value_json.value.hum }}"
+#     unit_of_measurement: "%"
+#     force_update: on      
 
   # - platform: rest
   #   name: p30_bmx280_temp
@@ -154,20 +166,20 @@ sensor:
   #       device_class: humidity
   #       unit_of_measurement: '%'
 
-  - platform: mqtt
-    name: "MQTT Температура p31 htu21d"
-    device_class: temperature
-    state_topic: "megad/14/31"
-    value_template: "{{ value_json.value.temp }}"
-    unit_of_measurement: "°C"
-    force_update: on
-  - platform: mqtt
-    name: "MQTT Влажность p31 htu21d"
-    device_class: humidity
-    state_topic: "megad/14/31"
-    value_template: "{{ value_json.value.hum }}"
-    unit_of_measurement: "%"
-    force_update: on    
+  # - platform: mqtt
+  #   name: "MQTT Температура p31 htu21d"
+  #   device_class: temperature
+  #   state_topic: "megad/14/31"
+  #   value_template: "{{ value_json.value.temp }}"
+  #   unit_of_measurement: "°C"
+  #   force_update: on
+  # - platform: mqtt
+  #   name: "MQTT Влажность p31 htu21d"
+  #   device_class: humidity
+  #   state_topic: "megad/14/31"
+  #   value_template: "{{ value_json.value.hum }}"
+  #   unit_of_measurement: "%"
+  #   force_update: on    
   
   # - platform: rest
   #   name: p31_htu21d_temp
@@ -203,13 +215,13 @@ sensor:
   #   unit_of_measurement: '%'
   #   force_update: on  
 
-  - platform: mqtt
-    name: MQTT ds18b20wp
-    device_class: temperature
-    state_topic: "megad/14/14"
-    value_template: "{{ value_json.value[5:] }}"
-    unit_of_measurement: "°C"
-    force_update: on
+  # - platform: mqtt
+  #   name: MQTT ds18b20wp
+  #   device_class: temperature
+  #   state_topic: "megad/14/14"
+  #   value_template: "{{ value_json.value[5:] }}"
+  #   unit_of_measurement: "°C"
+  #   force_update: on
 
   # - platform: rest
   #   name: p14_ds18b20wp_temp
@@ -267,7 +279,22 @@ sensor:
           device_class: temperature
           value_template: "{{states('sensor.megad_state').split(';')[14].split(':')[1]|float|round(1)}}"
           unit_of_measurement: '°C'
-       
+  
+  - platform: filter
+    name: "filtered_p30_bmx280_hum"
+    entity_id: sensor.p30_bmx280_hum
+    filters:
+      - filter: lowpass
+        time_constant: 10
+        precision: 2
+
+  - platform: filter
+    name: "filtered_p31_htu21d_hum"
+    entity_id: sensor.p31_htu21d_hum
+    filters:
+      - filter: lowpass
+        time_constant: 10
+        precision: 2
 
 #  - platform: mqtt
 #    name: "Темп. кухня"
@@ -329,20 +356,20 @@ sensor:
 ####################################################
 
 switch:
-  - platform: mqtt
-    name: MQTT heater
-    icon: "mdi:radiator"
-    state_topic: "megad/14/8"
-    value_template: "{{ value_json.value }}"
-    command_topic: "megad/14/cmd"
-    payload_on: "8:1"
-    payload_off: "8:0"
-    state_on: "ON"
-    state_off: "OFF"
+  # - platform: mqtt
+  #   name: MQTT heater
+  #   icon: "mdi:radiator"
+  #   state_topic: "megad/14/8"
+  #   value_template: "{{ value_json.value }}"
+  #   command_topic: "megad/14/cmd"
+  #   payload_on: "8:1"
+  #   payload_off: "8:0"
+  #   state_on: "ON"
+  #   state_off: "OFF"
 
   - platform: command_line
     switches:
-      p14_heater:
+      p7_heater:
         friendly_name: "Конвектор в бойлерной"
         command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=7&cmd=7:1'"
         command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=7&cmd=7:0'"
@@ -350,17 +377,24 @@ switch:
         value_template: "{{ value == 'ON' }}"
         #command_state: "/bin/cat './downloads/megad.state'"
         #value_template: "{{ value.split(";")[7] == "ON" }}"
+      p8_boiler:
+        friendly_name: "Бойлер 150л"
+        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=8&cmd=8:1'"
+        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=8&cmd=8:0'"
+        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=8&cmd=get'"
+        value_template: "{{ value == 'ON' }}"
+
 
 climate:
   - platform: generic_thermostat
     name: termostat1
-    heater: switch.p14_heater
+    heater: switch.p7_heater
     target_sensor: sensor.p14_ds18b20wp_temp
     min_temp: 7
     max_temp: 30
     min_cycle_duration:
-      minutes: 60
+      minutes: 5
     cold_tolerance: 1
-    hot_tolerance: 5
+    hot_tolerance: 1
     precision: 0.5
     initial_hvac_mode: "heat"
