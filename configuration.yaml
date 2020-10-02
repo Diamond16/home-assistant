@@ -249,14 +249,14 @@ sensor:
     force_update: on
   - platform: template
     sensors:
-      p0_ermangizer_alarm:
-          friendly_name: "Авария на Ermangizer"
-          device_class: power
-          value_template: "{{states('sensor.megad_state').split(';')[0].split('/')[0]}}"
-      p1_ermangizer_work:
-          friendly_name: "Режим работы Ermangizer"
-          device_class: power
-          value_template: "{{states('sensor.megad_state').split(';')[1].split('/')[0]}}"
+      # p0_ermangizer_alarm:
+      #     friendly_name: "Авария на Ermangizer"
+      #     device_class: power
+      #     value_template: "{{states('sensor.megad_state').split(';')[0].split('/')[0]}}"
+      # p1_ermangizer_work:
+      #     friendly_name: "Режим работы Ermangizer"
+      #     device_class: power
+      #     value_template: "{{states('sensor.megad_state').split(';')[1].split('/')[0]}}"
       p30_bmx280_temp:
           friendly_name: "Температура p30 bmx280"
           device_class: temperature
