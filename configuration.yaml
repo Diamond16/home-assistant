@@ -408,12 +408,12 @@ switch:
         command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=9&cmd=9:0'"
         command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=9&cmd=get'"
         value_template: "{{ value == 'ON' }}"
-      p10_ermangizer:
-        friendly_name: "Включение Ermangizer"
-        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:1'"
-        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:0'"
+      p10_warm_floor:
+        friendly_name: "Теплый пол"
+        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:0'"
+        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:1'"
         command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=get'"
-        value_template: "{{ value == 'ON' }}"
+        value_template: "{{ value == 'OFF' }}"
 
 
 climate:
