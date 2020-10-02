@@ -249,6 +249,14 @@ sensor:
     force_update: on
   - platform: template
     sensors:
+      p0_ermangizer_alarm:
+          friendly_name: "Авария на Ermangizer"
+          device_class: power
+          value_template: "{{states('sensor.megad_state').split(';')[0].split('/')[0]}}"
+      p1_ermangizer_work:
+          friendly_name: "Режим работы Ermangizer"
+          device_class: power
+          value_template: "{{states('sensor.megad_state').split(';')[1].split('/')[0]}}"
       p30_bmx280_temp:
           friendly_name: "Температура p30 bmx280"
           device_class: temperature
@@ -295,6 +303,17 @@ sensor:
       - filter: lowpass
         time_constant: 10
         precision: 2
+
+  - platform: filter
+    name: "filtered_p14_ds18b20wp_temp"
+    entity_id: sensor.p14_ds18b20wp_temp
+    filters:
+      - filter: outlier
+        window_size: 4
+        radius: 4.0
+      - filter: lowpass
+        time_constant: 10
+        precision: 1
 
 #  - platform: mqtt
 #    name: "Темп. кухня"
@@ -383,18 +402,30 @@ switch:
         command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=8&cmd=8:0'"
         command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=8&cmd=get'"
         value_template: "{{ value == 'ON' }}"
+      p9_sauna:
+        friendly_name: "Сауна"
+        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=9&cmd=9:1'"
+        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=9&cmd=9:0'"
+        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=9&cmd=get'"
+        value_template: "{{ value == 'ON' }}"
+      p10_ermangizer:
+        friendly_name: "Включение Ermangizer"
+        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:1'"
+        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:0'"
+        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=get'"
+        value_template: "{{ value == 'ON' }}"
 
 
 climate:
   - platform: generic_thermostat
-    name: termostat1
-    heater: switch.p7_heater
+    name: termostat_sauna
+    heater: switch.p9_sauna
     target_sensor: sensor.p14_ds18b20wp_temp
-    min_temp: 7
-    max_temp: 30
-    min_cycle_duration:
-      minutes: 5
-    cold_tolerance: 1
-    hot_tolerance: 1
+    min_temp: 30
+    max_temp: 110
+#   min_cycle_duration:
+#     minutes: 5
+    cold_tolerance: 10
+    hot_tolerance: 0
     precision: 0.5
-    initial_hvac_mode: "heat"
+    initial_hvac_mode: "off"
