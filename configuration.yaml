@@ -265,12 +265,12 @@ sensor:
       p30_bmx280_press:
           friendly_name: "Давление p30 bmx280"
           device_class: pressure
-          value_template: "{{states('sensor.megad_state').split(';')[30].split('/')[1].split(':')[1]|float|round(1)}}"
+          value_template: "{{states('sensor.megad_state').split(';')[30].split('/')[1].split(':')[1]|float}}"
           unit_of_measurement: 'hPa'
       p30_bmx280_hum:
           friendly_name: "Влажность p30 bmx280"
           device_class: humidity
-          value_template: "{{states('sensor.megad_state').split(';')[30].split('/')[2].split(':')[1]|float|round(1)}}"
+          value_template: "{{states('sensor.megad_state').split(';')[30].split('/')[2].split(':')[1]|float}}"
           unit_of_measurement: '%'
       p31_htu21d_temp:
           friendly_name: "Температура p31 htu21d"
@@ -280,7 +280,7 @@ sensor:
       p31_htu21d_hum:
           friendly_name: "Влажность p31 htu21d"
           device_class: humidity
-          value_template: "{{states('sensor.megad_state').split(';')[31].split('/')[1].split(':')[1]|float|round(1)}}"
+          value_template: "{{states('sensor.megad_state').split(';')[31].split('/')[1].split(':')[1]|float}}"
           unit_of_measurement: '%'
       p14_ds18b20wp_temp:
           friendly_name: "Температура p14 ds18b20wp"
@@ -289,21 +289,26 @@ sensor:
           unit_of_measurement: '°C'
   
   - platform: filter
-    name: "filtered_p30_bmx280_hum"
+    name: "Влажность p30 bmx280"
     entity_id: sensor.p30_bmx280_hum
     filters:
       - filter: lowpass
         time_constant: 10
-        precision: 2
-
+        precision: 1
   - platform: filter
-    name: "filtered_p31_htu21d_hum"
+    name: "Давление p30 bmx280"
+    entity_id: sensor.p30_bmx280_press
+    filters:
+      - filter: lowpass
+        time_constant: 10
+        precision: 1
+  - platform: filter
+    name: "Влажность p31 htu21d"
     entity_id: sensor.p31_htu21d_hum
     filters:
       - filter: lowpass
         time_constant: 10
-        precision: 2
-
+        precision: 1
   - platform: filter
     name: "filtered_p14_ds18b20wp_temp"
     entity_id: sensor.p14_ds18b20wp_temp
@@ -414,6 +419,24 @@ switch:
         command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:1'"
         command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=get'"
         value_template: "{{ value == 'OFF' }}"
+      p11_heater_kate:
+        friendly_name: "Конвектор у Кати в комнате"
+        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=11&cmd=11:1'"
+        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=11&cmd=11:0'"
+        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=11&cmd=get'"
+        value_template: "{{ value == 'ON' }}"
+      p12_heater_alisa:
+        friendly_name: "Конвектор у Алисы в комнате"
+        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=12&cmd=12:1'"
+        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=12&cmd=12:0'"
+        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=12&cmd=get'"
+        value_template: "{{ value == 'ON' }}"
+      p13_heater_guest1:
+        friendly_name: "Конвектор у Бабушки в комнате"
+        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=13&cmd=13:1'"
+        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=13&cmd=13:0'"
+        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=13&cmd=get'"
+        value_template: "{{ value == 'ON' }}"
 
 
 climate:
