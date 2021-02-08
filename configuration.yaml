@@ -265,12 +265,12 @@ sensor:
       p30_bmx280_press:
           friendly_name: "Давление p30 bmx280"
           device_class: pressure
-          value_template: "{{states('sensor.megad_state').split(';')[30].split('/')[1].split(':')[1]|float}}"
+          value_template: "{{states('sensor.megad_state').split(';')[30].split('/')[1].split(':')[1]|float|round(1)}}"
           unit_of_measurement: 'hPa'
       p30_bmx280_hum:
           friendly_name: "Влажность p30 bmx280"
           device_class: humidity
-          value_template: "{{states('sensor.megad_state').split(';')[30].split('/')[2].split(':')[1]|float}}"
+          value_template: "{{states('sensor.megad_state').split(';')[30].split('/')[2].split(':')[1]|float|round(1)}}"
           unit_of_measurement: '%'
       p31_htu21d_temp:
           friendly_name: "Температура p31 htu21d"
@@ -280,12 +280,18 @@ sensor:
       p31_htu21d_hum:
           friendly_name: "Влажность p31 htu21d"
           device_class: humidity
-          value_template: "{{states('sensor.megad_state').split(';')[31].split('/')[1].split(':')[1]|float}}"
+          value_template: "{{states('sensor.megad_state').split(';')[31].split('/')[1].split(':')[1]|float|round(1)}}"
           unit_of_measurement: '%'
       p14_ds18b20wp_temp:
           friendly_name: "Температура p14 ds18b20wp"
           device_class: temperature
-          value_template: "{{states('sensor.megad_state').split(';')[14].split(':')[1]|float|round(1)}}"
+          value_template: >
+                          {% set val = states('sensor.megad_state').split(';')[14].split(':')[1]|float %}
+                          {% if val and -10 < val %}
+                            {{ val|round(1) }}
+                          {% else %}
+                            {{ states('sensor.p14_ds18b20wp_temp') }}
+                          {% endif %}
           unit_of_measurement: '°C'
   
   - platform: filter
@@ -438,6 +444,23 @@ switch:
         command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=13&cmd=get'"
         value_template: "{{ value == 'ON' }}"
 
+input_number:
+  day_temp:
+    mode: slider
+    name: Day temperature
+    initial: 22
+    min: 5
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
+  night_temp:
+    mode: slider
+    name: Night temperature
+    initial: 24
+    min: 5
+    max: 30
+    step: 0.5
+    unit_of_measurement: "°C"
 
 climate:
   - platform: generic_thermostat
@@ -448,7 +471,20 @@ climate:
     max_temp: 110
 #   min_cycle_duration:
 #     minutes: 5
-    cold_tolerance: 10
+    cold_tolerance: 5
     hot_tolerance: 0
     precision: 0.5
     initial_hvac_mode: "off"
+
+  - platform: generic_thermostat
+    name: warm_floor
+    heater: switch.p10_warm_floor
+    target_sensor: sensor.p30_bmx280_temp
+    min_temp: 5
+    max_temp: 28
+    min_cycle_duration:
+      hours: 1
+    cold_tolerance: 0.5
+    hot_tolerance: 0.5
+    precision: 0.5
+    initial_hvac_mode: "off"    
