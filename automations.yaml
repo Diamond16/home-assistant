@@ -43,11 +43,11 @@
   - condition: time
     after: '7:00:00'
     before: '23:00:00'
-  - condition: and
-    conditions:
-    - condition: state
-      entity_id: climate.warm_floor
-      state: heat
+  # - condition: and
+  #   conditions:
+  #   - condition: state
+  #     entity_id: climate.warm_floor
+  #     state: heat
   action:
     - service: climate.set_temperature
       data_template:
@@ -62,11 +62,11 @@
   - condition: time
     after: '23:00:00'
     before: '7:00:00'
-  - condition: and
-    conditions:
-    - condition: state
-      entity_id: climate.warm_floor
-      state: heat
+  # - condition: and
+  #   conditions:
+  #   - condition: state
+  #     entity_id: climate.warm_floor
+  #     state: heat
   action:
     - service: climate.set_temperature
       data_template:
@@ -121,7 +121,7 @@
 #     action:
 #       # - service: downloader.download_file
 #       #   data_template:
-#       #     url: "http://10.8.0.5:304/sec/?cmd=all"
+#       #     url: "http://192.168.1.14:80/sec/?cmd=all"
 #       #     filename: "megad.state"
 #       #     overwrite: "true"
 #       - service: homeassistant.update_entity

@@ -8,7 +8,7 @@ default_config:
 
 homeassistant:
   whitelist_external_dirs:
-    - /home/fazenda/.homeassistant
+    - /home/homeassistant/.homeassistant
 
 # Text to speech
 tts:
@@ -57,17 +57,17 @@ recorder:
 #           MegaD HTTP command & responses exapmples           #
 #                                                  #
 ####################################################
-#GET http://10.8.0.5:304/sec/?cmd=all // get current value for all ports
+#GET http://192.168.1.14:80/sec/?cmd=all // get current value for all ports
 #OFF/0;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;temp:10.06;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;OFF;temp:10.24/press:728.92/hum:61.235;temp:10.66/hum:68.10;OFF;OFF;OFF;OFF;OFF;OFF
-#GET http://10.8.0.5:304/sec/?pt=30&cmd=get // get value for any port
+#GET http://192.168.1.14:80/sec/?pt=30&cmd=get // get value for any port
 #temp:10.24/press:728.92/hum:61.247
-#GET http://10.8.0.5:304/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=3
+#GET http://192.168.1.14:80/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=3
 #temp:10.23/press:728.90/hum:61.245
-#GET http://10.8.0.5:304/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=1
+#GET http://192.168.1.14:80/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=1
 #10.24
-#http://10.8.0.5:304/sec/?pt=7&cmd=get
+#http://192.168.1.14:80/sec/?pt=7&cmd=get
 #OFF
-#http://10.8.0.5:304/sec/?pt=1&cmd=d // run default action for port 1
+#http://192.168.1.14:80/sec/?pt=1&cmd=d // run default action for port 1
 
 ####################################################
 #                                                  #
@@ -79,7 +79,7 @@ sensor:
     name: HA Uptime
   - platform: filesize
     file_paths:
-      - /home/fazenda/.homeassistant/home-assistant_v2.db
+      - /home/homeassistant/.homeassistant/home-assistant_v2.db
 #   - platform: mqtt
 #     name: "MQTT Температура p30 bmx280"
 #     device_class: temperature
@@ -106,7 +106,7 @@ sensor:
   #   name: p30_bmx280_temp
   #   friendly_name: "Температура p30 bmx280"
   #   device_class: temperature
-  #   resource: http://10.8.0.5:304/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=1
+  #   resource: http://192.168.1.14:80/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=1
   #   value_template: "{{value|float}}"
   #   unit_of_measurement: '°C'
   #   force_update: on
@@ -114,7 +114,7 @@ sensor:
   #   name: p30_bmx280_press
   #   friendly_name: "Давление p30 bmx280"
   #   device_class: pressure
-  #   resource: http://10.8.0.5:304/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=0
+  #   resource: http://192.168.1.14:80/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=0
   #   value_template: "{{value|float}}"
   #   unit_of_measurement: 'hPa'
   #   force_update: on
@@ -122,7 +122,7 @@ sensor:
   #   name: p30_bmx280_hum
   #   friendly_name: "Влажность p30 bmx280"
   #   device_class: humidity
-  #   resource: http://10.8.0.5:304/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=2
+  #   resource: http://192.168.1.14:80/sec/?pt=30&scl=32&i2c_dev=bmx280&i2c_par=2
   #   value_template: "{{value|float}}"
   #   unit_of_measurement: '%'
   #   force_update: on
@@ -185,7 +185,7 @@ sensor:
   #   name: p31_htu21d_temp
   #   friendly_name: "Температура p31 htu21d"
   #   device_class: temperature
-  #   resource: http://10.8.0.5:304/sec/?pt=31&scl=32&i2c_dev=htu21d&i2c_par=1
+  #   resource: http://192.168.1.14:80/sec/?pt=31&scl=32&i2c_dev=htu21d&i2c_par=1
   #   value_template: "{{value|float}}"
   #   unit_of_measurement: '°C'
   #   force_update: on
@@ -193,7 +193,7 @@ sensor:
   #   name: p31_htu21d_hum
   #   friendly_name: "Влажность p31 htu21d"
   #   device_class: humidity
-  #   resource: http://10.8.0.5:304/sec/?pt=31&scl=32&i2c_dev=htu21d&i2c_par=0
+  #   resource: http://192.168.1.14:80/sec/?pt=31&scl=32&i2c_dev=htu21d&i2c_par=0
   #   value_template: "{{value|float}}"
   #   unit_of_measurement: '%'
   #   force_update: on  
@@ -227,7 +227,7 @@ sensor:
   #   name: p14_ds18b20wp_temp
   #   friendly_name: "Температура p14 ds18b20wp"
   #   device_class: temperature
-  #   resource: http://10.8.0.5:304/sec/?pt=14&cmd=get
+  #   resource: http://192.168.1.14:80/sec/?pt=14&cmd=get
   #   value_template: "{{value[5:]|float}}"
   #   #value_template: "{{value|replace('temp:','')|float}}"
   #   unit_of_measurement: '°C'
@@ -244,7 +244,7 @@ sensor:
 
   - platform: rest
     name: megad_state
-    resource: http://10.8.0.5:304/sec/?cmd=all
+    resource: http://192.168.1.14:80/sec/?cmd=all
     value_template: "{{value}}"
     force_update: on
   - platform: template
@@ -401,47 +401,47 @@ switch:
     switches:
       p7_heater:
         friendly_name: "Конвектор в бойлерной"
-        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=7&cmd=7:1'"
-        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=7&cmd=7:0'"
-        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=7&cmd=get'"
+        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=7:1'"
+        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=7:0'"
+        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=get'"
         value_template: "{{ value == 'ON' }}"
         #command_state: "/bin/cat './downloads/megad.state'"
         #value_template: "{{ value.split(";")[7] == "ON" }}"
       p8_boiler:
         friendly_name: "Бойлер 150л"
-        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=8&cmd=8:1'"
-        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=8&cmd=8:0'"
-        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=8&cmd=get'"
+        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=8:1'"
+        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=8:0'"
+        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=get'"
         value_template: "{{ value == 'ON' }}"
       p9_sauna:
         friendly_name: "Сауна"
-        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=9&cmd=9:1'"
-        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=9&cmd=9:0'"
-        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=9&cmd=get'"
+        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=9:1'"
+        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=9:0'"
+        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=get'"
         value_template: "{{ value == 'ON' }}"
       p10_warm_floor:
         friendly_name: "Теплый пол"
-        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:0'"
-        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=10:1'"
-        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=10&cmd=get'"
+        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=10:0'"
+        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=10:1'"
+        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=get'"
         value_template: "{{ value == 'OFF' }}"
       p11_heater_kate:
         friendly_name: "Конвектор у Кати в комнате"
-        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=11&cmd=11:1'"
-        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=11&cmd=11:0'"
-        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=11&cmd=get'"
+        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=11:1'"
+        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=11:0'"
+        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=get'"
         value_template: "{{ value == 'ON' }}"
       p12_heater_alisa:
         friendly_name: "Конвектор у Алисы в комнате"
-        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=12&cmd=12:1'"
-        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=12&cmd=12:0'"
-        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=12&cmd=get'"
+        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=12:1'"
+        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=12:0'"
+        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=get'"
         value_template: "{{ value == 'ON' }}"
       p13_heater_guest1:
         friendly_name: "Конвектор у Бабушки в комнате"
-        command_on: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=13&cmd=13:1'"
-        command_off: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=13&cmd=13:0'"
-        command_state: "/usr/bin/curl -X GET 'http://10.8.0.5:304/sec/?pt=13&cmd=get'"
+        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=13:1'"
+        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=13:0'"
+        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=get'"
         value_template: "{{ value == 'ON' }}"
 
 input_number:
