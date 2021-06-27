@@ -121,7 +121,7 @@
 #     action:
 #       # - service: downloader.download_file
 #       #   data_template:
-#       #     url: "http://192.168.1.14:80/sec/?cmd=all"
+#       #     url: "http://192.168.8.14:80/sec/?cmd=all"
 #       #     filename: "megad.state"
 #       #     overwrite: "true"
 #       - service: homeassistant.update_entity
