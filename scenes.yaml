@@ -1,0 +1,98 @@
+- id: '1640013081386'
+  name: Отключить отопление
+  entities:
+    input_number.day_temp:
+      initial: 22
+      editable: false
+      min: 5
+      max: 30
+      step: 0.5
+      mode: slider
+      unit_of_measurement: °C
+      friendly_name: Day temperature
+      state: '5.0'
+    input_number.night_temp:
+      initial: 24
+      editable: false
+      min: 5
+      max: 30
+      step: 0.5
+      mode: slider
+      unit_of_measurement: °C
+      friendly_name: Night temperature
+      state: '7.0'
+    climate.warm_floor:
+      hvac_modes:
+      - heat
+      - 'off'
+      min_temp: 5
+      max_temp: 28
+      target_temp_step: 0.5
+      current_temperature: 13
+      temperature: 5
+      hvac_action: idle
+      friendly_name: warm_floor
+      supported_features: 1
+      state: heat
+    switch.p8_boiler:
+      friendly_name: Бойлер 150л
+      state: 'off'
+    switch.p11_heater_kate:
+      friendly_name: Конвектор у Кати в комнате
+      state: 'off'
+    switch.p12_heater_alisa:
+      friendly_name: Конвектор у Алисы в комнате
+      state: 'off'
+    switch.p13_heater_guest1:
+      friendly_name: Конвектор у Бабушки в комнате
+      state: 'off'
+  icon: mdi:radiator-off
+- id: '1640013236194'
+  name: Включить отопление
+  entities:
+    input_number.day_temp:
+      initial: 22
+      editable: false
+      min: 5
+      max: 30
+      step: 0.5
+      mode: slider
+      unit_of_measurement: °C
+      friendly_name: Day temperature
+      state: '22.0'
+    input_number.night_temp:
+      initial: 24
+      editable: false
+      min: 5
+      max: 30
+      step: 0.5
+      mode: slider
+      unit_of_measurement: °C
+      friendly_name: Night temperature
+      state: '24.0'
+    switch.p12_heater_alisa:
+      friendly_name: Конвектор у Алисы в комнате
+      state: 'on'
+    switch.p11_heater_kate:
+      friendly_name: Конвектор у Кати в комнате
+      state: 'on'
+    climate.warm_floor:
+      hvac_modes:
+      - heat
+      - 'off'
+      min_temp: 5
+      max_temp: 28
+      target_temp_step: 0.5
+      current_temperature: 13
+      temperature: 22
+      hvac_action: heating
+      friendly_name: warm_floor
+      supported_features: 1
+      state: heat
+    switch.p8_boiler:
+      friendly_name: Бойлер 150л
+      state: 'on'
+    switch.p13_heater_guest1:
+      friendly_name: Конвектор у Бабушки в комнате
+      state: 'off'
+  icon: mdi:radiator
