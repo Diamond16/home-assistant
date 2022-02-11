@@ -18,6 +18,10 @@ sonoff:
   scan_interval: '00:05:00'  # (optional) default 5 minutes
   sensors: [temperature, humidity, power, current, voltage, rssi]
 
+yandex_station:
+  include:
+    - "Конвектор Ванна 1 этаж"
+    - "Конвектор Ванна 2 этаж"
 
 # Text to speech
 tts:
