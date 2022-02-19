@@ -306,6 +306,36 @@ sensor:
                             {{ states('sensor.p14_ds18b20wp_temp') }}
                           {% endif %}
           unit_of_measurement: '°C'
+      vanna_1_voltage:
+          friendly_name: "Конвактор ванна 1 напряжене"
+          device_class: voltage
+          value_template: "{{state_attr('switch.konvektor_vanna_1_etazh', 'voltage')}}"
+          unit_of_measurement: 'V'
+      vanna_1_current:
+          friendly_name: "Конвактор ванна 1 сила тока"
+          device_class: current
+          value_template: "{{state_attr('switch.konvektor_vanna_1_etazh', 'amperage')}}"
+          unit_of_measurement: 'A'
+      vanna_1_power:
+          friendly_name: "Конвактор ванна 1 потребление"
+          device_class: power
+          value_template: "{{state_attr('switch.konvektor_vanna_1_etazh', 'power')}}"
+          unit_of_measurement: 'Вт'
+      vanna_2_voltage:
+          friendly_name: "Конвактор ванна 2 напряжене"
+          device_class: voltage
+          value_template: "{{state_attr('switch.konvektor_vanna_2_etazh', 'voltage')}}"
+          unit_of_measurement: 'V'
+      vanna_2_current:
+          friendly_name: "Конвактор ванна 2 сила тока"
+          device_class: current
+          value_template: "{{state_attr('switch.konvektor_vanna_2_etazh', 'amperage')}}"
+          unit_of_measurement: 'A'
+      vanna_2_power:
+          friendly_name: "Конвактор ванна 2 потребление"
+          device_class: power
+          value_template: "{{state_attr('switch.konvektor_vanna_2_etazh', 'power')}}"
+          unit_of_measurement: 'Вт'
   
   - platform: filter
     name: "Влажность p30 bmx280"
