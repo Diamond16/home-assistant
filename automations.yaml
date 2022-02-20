@@ -10,7 +10,7 @@
 - alias: "Night mode off"
   trigger:
   - platform: time
-    at: "6:59:30"
+    at: "7:15:00"
   condition:
   - condition: state
     entity_id: climate.warm_floor
@@ -24,7 +24,7 @@
 - alias: "Night mode on"
   trigger:
   - platform: time
-    at: "23:00:30"
+    at: "23:18:00"
   condition:
   - condition: state
     entity_id: climate.warm_floor
@@ -41,8 +41,8 @@
       entity_id: input_number.day_temp
   condition:
   - condition: time
-    after: '7:00:00'
-    before: '23:00:00'
+    after: '7:15:00'
+    before: '23:18:00'
   # - condition: and
   #   conditions:
   #   - condition: state
@@ -60,8 +60,8 @@
       entity_id: input_number.night_temp
   condition:
   - condition: time
-    after: '23:00:00'
-    before: '7:00:00'
+    after: '23:18:00'
+    before: '7:15:00'
   # - condition: and
   #   conditions:
   #   - condition: state
