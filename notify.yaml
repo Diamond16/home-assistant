@@ -1,0 +1,3 @@
+- name: me
+  platform: telegram
+  chat_id: !secret telegram_chat_id1  # telegram ID, который имеет доступ к боту. Спрашивать у @getidsbot

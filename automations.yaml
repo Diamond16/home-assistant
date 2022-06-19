@@ -73,6 +73,85 @@
         entity_id: climate.warm_floor
         temperature: '{{ states.input_number.night_temp.state }}'
 
+# Telegram commands
+- id: telegram-start
+  alias: 'Telegram Start Command'
+  initial_state: on
+  trigger:
+    platform: event
+    event_type: 
+    - telegram_command
+    - telegram_callback
+    event_data:
+      command: '/start'
+  action:
+  - service: telegram_bot.send_message
+    data_template:
+        target: '{{ trigger.event.data.user_id }}'
+        message: >
+            {{ [
+            "Привет",
+            "Здорова",
+            "Как дела?",
+            "Давно не виделись",
+            "Здрасьте",
+            "Что случилось?",
+            "Ну поехали?",
+            "Приветик",
+            "Хелло амиго",
+            "Буенос ночес!"
+            ] | random }}       
+        data:
+        inline_keyboard:
+          - '{{"\U0001F4A1"}} Lights:/lights, {{"\u2753"}} Status:/status, {{"\u26D4"}} Security:/security'
+          - '{{"\U0001F6E0"}} System:/system, {{"\U0001F501"}} Ping:/ping, {{"\U0001F4CC"}} User location:/location '
+          - '{{"\U0001F324"}} Weather:/weather, {{"\U0001F4B5"}} Shoping :/shopinglist'
+- id: telegram-status
+  alias: 'Telegram Status Command'
+  initial_state: on
+  trigger:
+    platform: event
+    event_type: 
+    - telegram_callback
+    event_data:
+      data: '/status'
+  action:
+    - service: telegram_bot.edit_message
+      data_template:
+        message_id: 'last'
+        chat_id: '{{ trigger.event.data.user_id }}'
+        title: '{{"\u2753"}} *Состояние*'
+        message: | 
+                  *В бойлерной*
+                  {{"\U0001F321"}} Температура - {{ states ('sensor.p30_bmx280_temp') }} {{"\u00b0C"}}
+                  {{"\ud83d\udca6"}} Влажность - {{ states('sensor.p30_bmx280_hum') }} %
+                  {{"\U0001F4AA"}} Давление - {{ states('sensor.p30_bmx280_press') }} мм рт. ст
+
+                  *У Алисы в комнате*
+                  {{"\U0001F321"}} Температура - {{ states ('sensor.0x158d00040e165e_temperature')|round(1) }} {{"\u00b0C"}}
+                  {{"\ud83d\udca6"}} Влажность - {{ states('sensor.0x158d00040e165e_humidity')|round(1) }} %
+
+                  {{"\U0001F4A7"}} *Водонагреватель* - {{ states('switch.p8_boiler') }}
+
+                  {{"\u2668\ufe0f"}} *Отопление*
+                  Теплый пол - {{ states('switch.p10_warm_floor') }}
+                  Комната Кати - {{ states('switch.p11_heater_kate') }}
+                  Комната Алиса - {{ states('switch.p12_heater_alisa') }}
+                  Комната Бабушки - {{ states('switch.p13_heater_guest1') }}
+                  Ванна 1эт - {{ states('switch.konvektor_vanna_1_etazh') }} Мощность {{ states('sensor.vanna_1_power') }} Вт Напряжение {{ states('sensor.vanna_1_voltage') }} В
+                  Ванна 2эт - {{ states('switch.konvektor_vanna_2_etazh') }} Мощность {{ states('sensor.vanna_2_power') }} Вт Напряжение {{ states('sensor.vanna_2_voltage') }} В
+                  Сауна - {{ states('switch.p9_sauna') }}
+        inline_keyboard:
+          - '{{ "\u21a9\ufe0f" }} Назад:/start'
+- alias: Notify about HA start
+  trigger:
+  - platform: homeassistant
+    event: start
+  action:
+  - service: notify.me
+    data:
+      message: "Включили свет на даче!!!"
+
 # - alias: "Sensors update p14"
 #   trigger:
 #   - platform: time_pattern
@@ -121,7 +200,7 @@
 #     action:
 #       # - service: downloader.download_file
 #       #   data_template:
-#       #     url: "http://192.168.8.14:80/sec/?cmd=all"
+#       #     url: "http://192.168.1.14:80/sec/?cmd=all"
 #       #     filename: "megad.state"
 #       #     overwrite: "true"
 #       - service: homeassistant.update_entity
