@@ -1,16 +1,16 @@
-- alias: "MegaD Sensors update"
+- alias: MegaD Sensors update
   trigger:
   - platform: time_pattern
-    seconds: "0"
+    seconds: '0'
   condition: []
   action:
   - service: homeassistant.update_entity
     entity_id: sensor.megad_state
-
-- alias: "Night mode off"
+  id: 8f2f8144886c426aa0e2982c0e8d4e68
+- alias: Night mode off
   trigger:
   - platform: time
-    at: "7:15:00"
+    at: '7:15:00'
   condition:
   - condition: state
     entity_id: climate.warm_floor
@@ -20,11 +20,11 @@
     data_template:
       entity_id: climate.warm_floor
       temperature: '{{ states.input_number.day_temp.state }}'
-
-- alias: "Night mode on"
+  id: 5b9fcc362afb42e1b82dd248719febc0
+- alias: Night mode on
   trigger:
   - platform: time
-    at: "23:18:00"
+    at: '23:18:00'
   condition:
   - condition: state
     entity_id: climate.warm_floor
@@ -34,115 +34,117 @@
     data_template:
       entity_id: climate.warm_floor
       temperature: '{{ states.input_number.night_temp.state }}'
-
-- alias: 'Change Day Temp'
+  id: fd1109b345404e7c956746514f0f0481
+- alias: Change Day Temp
   trigger:
-    - platform: state
-      entity_id: input_number.day_temp
+  - platform: state
+    entity_id: input_number.day_temp
   condition:
   - condition: time
     after: '7:15:00'
     before: '23:18:00'
-  # - condition: and
-  #   conditions:
-  #   - condition: state
-  #     entity_id: climate.warm_floor
-  #     state: heat
   action:
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.warm_floor
-        temperature: '{{ states.input_number.day_temp.state }}'
-
-- alias: 'Change Night Temp'
+  - service: climate.set_temperature
+    data_template:
+      entity_id: climate.warm_floor
+      temperature: '{{ states.input_number.day_temp.state }}'
+  id: a8d20895ae284b138ade3ecb8eaf8235
+- alias: Change Night Temp
   trigger:
-    - platform: state
-      entity_id: input_number.night_temp
+  - platform: state
+    entity_id: input_number.night_temp
   condition:
   - condition: time
     after: '23:18:00'
     before: '7:15:00'
-  # - condition: and
-  #   conditions:
-  #   - condition: state
-  #     entity_id: climate.warm_floor
-  #     state: heat
   action:
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.warm_floor
-        temperature: '{{ states.input_number.night_temp.state }}'
-
-# Telegram commands
+  - service: climate.set_temperature
+    data_template:
+      entity_id: climate.warm_floor
+      temperature: '{{ states.input_number.night_temp.state }}'
+  id: c3d503032b8440a18019586b152019cd
 - id: telegram-start
-  alias: 'Telegram Start Command'
-  initial_state: on
+  alias: Telegram Start Command
+  initial_state: true
   trigger:
     platform: event
-    event_type: 
+    event_type:
     - telegram_command
     - telegram_callback
     event_data:
-      command: '/start'
+      command: /start
   action:
   - service: telegram_bot.send_message
     data_template:
-        target: '{{ trigger.event.data.user_id }}'
-        message: >
-            {{ [
-            "Привет",
-            "Здорова",
-            "Как дела?",
-            "Давно не виделись",
-            "Здрасьте",
-            "Что случилось?",
-            "Ну поехали?",
-            "Приветик",
-            "Хелло амиго",
-            "Буенос ночес!"
-            ] | random }}       
-        data:
-        inline_keyboard:
-          - '{{"\U0001F4A1"}} Lights:/lights, {{"\u2753"}} Status:/status, {{"\u26D4"}} Security:/security'
-          - '{{"\U0001F6E0"}} System:/system, {{"\U0001F501"}} Ping:/ping, {{"\U0001F4CC"}} User location:/location '
-          - '{{"\U0001F324"}} Weather:/weather, {{"\U0001F4B5"}} Shoping :/shopinglist'
+      target: '{{ trigger.event.data.user_id }}'
+      message: "{{ [ \"Привет\", \"Здорова\", \"Как дела?\", \"Давно не виделись\"\
+        , \"Здрасьте\", \"Что случилось?\", \"Ну поехали?\", \"Приветик\", \"Хелло\
+        \ амиго\", \"Буенос ночес!\" ] | random }}       \n"
+      data:
+      inline_keyboard:
+      - '{{"\U0001F4A1"}} Lights:/lights, {{"\u2753"}} Status:/status, {{"\u26D4"}}
+        Security:/security'
+      - '{{"\U0001F6E0"}} System:/system, {{"\U0001F501"}} Ping:/ping, {{"\U0001F4CC"}}
+        User location:/location '
+      - '{{"\U0001F324"}} Weather:/weather, {{"\U0001F4B5"}} Shoping :/shopinglist'
 - id: telegram-status
-  alias: 'Telegram Status Command'
-  initial_state: on
+  alias: Telegram Status Command
+  initial_state: true
   trigger:
     platform: event
-    event_type: 
+    event_type:
     - telegram_callback
     event_data:
-      data: '/status'
+      data: /status
   action:
-    - service: telegram_bot.edit_message
-      data_template:
-        message_id: 'last'
-        chat_id: '{{ trigger.event.data.user_id }}'
-        title: '{{"\u2753"}} *Состояние*'
-        message: | 
-                  *В бойлерной*
-                  {{"\U0001F321"}} Температура - {{ states ('sensor.p30_bmx280_temp') }} {{"\u00b0C"}}
-                  {{"\ud83d\udca6"}} Влажность - {{ states('sensor.p30_bmx280_hum') }} %
-                  {{"\U0001F4AA"}} Давление - {{ states('sensor.p30_bmx280_press') }} мм рт. ст
+  - service: telegram_bot.edit_message
+    data_template:
+      message_id: last
+      chat_id: '{{ trigger.event.data.user_id }}'
+      title: '{{"\u2753"}} *Состояние*'
+      message: '*В бойлерной*
 
-                  *У Алисы в комнате*
-                  {{"\U0001F321"}} Температура - {{ states ('sensor.0x158d00040e165e_temperature')|round(1) }} {{"\u00b0C"}}
-                  {{"\ud83d\udca6"}} Влажность - {{ states('sensor.0x158d00040e165e_humidity')|round(1) }} %
+        {{"\U0001F321"}} Температура - {{ states (''sensor.p30_bmx280_temp'') }} {{"\u00b0C"}}
 
-                  {{"\U0001F4A7"}} *Водонагреватель* - {{ states('switch.p8_boiler') }}
+        {{"\ud83d\udca6"}} Влажность - {{ states(''sensor.p30_bmx280_hum'') }} %
 
-                  {{"\u2668\ufe0f"}} *Отопление*
-                  Теплый пол - {{ states('switch.p10_warm_floor') }}
-                  Комната Кати - {{ states('switch.p11_heater_kate') }}
-                  Комната Алиса - {{ states('switch.p12_heater_alisa') }}
-                  Комната Бабушки - {{ states('switch.p13_heater_guest1') }}
-                  Ванна 1эт - {{ states('switch.konvektor_vanna_1_etazh') }} Мощность {{ states('sensor.vanna_1_power') }} Вт Напряжение {{ states('sensor.vanna_1_voltage') }} В
-                  Ванна 2эт - {{ states('switch.konvektor_vanna_2_etazh') }} Мощность {{ states('sensor.vanna_2_power') }} Вт Напряжение {{ states('sensor.vanna_2_voltage') }} В
-                  Сауна - {{ states('switch.p9_sauna') }}
-        inline_keyboard:
-          - '{{ "\u21a9\ufe0f" }} Назад:/start'
+        {{"\U0001F4AA"}} Давление - {{ states(''sensor.p30_bmx280_press'') }} мм рт.
+        ст
+
+
+        *У Алисы в комнате*
+
+        {{"\U0001F321"}} Температура - {{ states (''sensor.0x158d00040e165e_temperature'')|round(1)
+        }} {{"\u00b0C"}}
+
+        {{"\ud83d\udca6"}} Влажность - {{ states(''sensor.0x158d00040e165e_humidity'')|round(1)
+        }} %
+
+
+        {{"\U0001F4A7"}} *Водонагреватель* - {{ states(''switch.p8_boiler'') }}
+
+
+        {{"\u2668\ufe0f"}} *Отопление*
+
+        Теплый пол - {{ states(''switch.p10_warm_floor'') }}
+
+        Комната Кати - {{ states(''switch.p11_heater_kate'') }}
+
+        Комната Алиса - {{ states(''switch.p12_heater_alisa'') }}
+
+        Комната Бабушки - {{ states(''switch.p13_heater_guest1'') }}
+
+        Ванна 1эт - {{ states(''switch.konvektor_vanna_1_etazh'') }} Мощность {{ states(''sensor.vanna_1_power'')
+        }} Вт Напряжение {{ states(''sensor.vanna_1_voltage'') }} В
+
+        Ванна 2эт - {{ states(''switch.konvektor_vanna_2_etazh'') }} Мощность {{ states(''sensor.vanna_2_power'')
+        }} Вт Напряжение {{ states(''sensor.vanna_2_voltage'') }} В
+
+        Сауна - {{ states(''switch.p9_sauna'') }}
+
+        '
+      inline_keyboard:
+      - '{{ "\u21a9\ufe0f" }} Назад:/start'
 - alias: Notify about HA start
   trigger:
   - platform: homeassistant
@@ -150,70 +152,25 @@
   action:
   - service: notify.me
     data:
-      message: "Включили свет на даче!!!"
-
-# - alias: "Sensors update p14"
-#   trigger:
-#   - platform: time_pattern
-#     seconds: "10"
-#   condition: []
-#   action:
-#   - service: mqtt.publish
-#     data: 
-#       payload: "get:14"
-#       topic: megad/14/cmd
-
-# - alias: "Sensors update p30"
-#   trigger:
-#   - platform: time_pattern
-#     seconds: "20"
-#   condition: []
-#   action:
-#   - service: mqtt.publish
-#     data: 
-#       payload: "get:30"
-#       topic: megad/14/cmd
-
-# - alias: "Sensors update p31"
-#   trigger:
-#   - platform: time_pattern
-#     seconds: "30"
-#   condition: []
-#   action:
-#   - service: mqtt.publish
-#     data: 
-#       payload: "get:31"
-#       topic: megad/14/cmd
-
-# - alias: 'p3_bmx280_temp_update'
-#     trigger:
-#       - platform: time_pattern
-#         minutes: '/1'
-#     action:
-#       - service: homeassistant.update_entity
-#         entity_id: sensor.p3_bmx280_temp
-
-# - alias: "Update all ports"
-#     trigger:
-#       - platform: time_pattern
-#         seconds: "10"
-#     action:
-#       # - service: downloader.download_file
-#       #   data_template:
-#       #     url: "http://192.168.1.14:80/sec/?cmd=all"
-#       #     filename: "megad.state"
-#       #     overwrite: "true"
-#       - service: homeassistant.update_entity
-#         entity_id: 
-#           - sensor.megad_state
-
-# - initial_state: 'on'
-#   alias: 'Megad hook'
-#   trigger:
-#     - platform: webhook
-#       webhook_id: md
-#   action:
-#     - event: tasker_webhook
-#       event_data_template:
-#         who: "{{ trigger.json.who }}"
-#         what: "{{ trigger.json.what }}"
+      message: Включили свет на даче!!!
+  id: 2876b24d9c1f4bc99ab6eddd4c36f4d2
+- id: '1683728337984'
+  alias: Включить полив в теплице на 30м
+  description: ''
+  trigger: []
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 8b20f7dfa8c7f21cfbef36836a82ef44
+    entity_id: switch.sonoff_10011ff50f
+    domain: switch
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - type: turn_off
+    device_id: 8b20f7dfa8c7f21cfbef36836a82ef44
+    entity_id: switch.sonoff_10011ff50f
+    domain: switch
+  mode: single

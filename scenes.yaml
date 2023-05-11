@@ -28,7 +28,7 @@
       min_temp: 5
       max_temp: 28
       target_temp_step: 0.5
-      current_temperature: 13
+      current_temperature: 23
       temperature: 5
       hvac_action: idle
       friendly_name: warm_floor
@@ -45,6 +45,18 @@
       state: 'off'
     switch.p13_heater_guest1:
       friendly_name: Конвектор у Бабушки в комнате
+      state: 'off'
+    switch.konvektor_vanna_1_etazh:
+      voltage: 231
+      power: 0
+      amperage: 0
+      friendly_name: Конвектор Ванна 1 этаж
+      state: 'off'
+    switch.konvektor_vanna_2_etazh:
+      voltage: 234
+      power: 0
+      amperage: 0
+      friendly_name: Конвектор Ванна 2 этаж
       state: 'off'
   icon: mdi:radiator-off
 - id: '1640013236194'
@@ -69,7 +81,7 @@
       mode: slider
       unit_of_measurement: °C
       friendly_name: Night temperature
-      state: '24.0'
+      state: '23.5'
     switch.p12_heater_alisa:
       friendly_name: Конвектор у Алисы в комнате
       state: 'on'
@@ -83,9 +95,9 @@
       min_temp: 5
       max_temp: 28
       target_temp_step: 0.5
-      current_temperature: 13
+      current_temperature: 22.5
       temperature: 22
-      hvac_action: heating
+      hvac_action: idle
       friendly_name: warm_floor
       supported_features: 1
       state: heat

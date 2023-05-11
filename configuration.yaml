@@ -13,15 +13,16 @@ homeassistant:
 sonoff:
   username: !secret sonoff_login
   password: !secret sonoff_password
-  mode: cloud
-  force_update: [temperature, power]
-  scan_interval: '00:05:00'  # (optional) default 5 minutes
+  mode: auto
+  #force_update: [temperature, power]
+  #scan_interval: '00:05:00'  # (optional) default 5 minutes
   sensors: [temperature, humidity, power, current, voltage, rssi]
 
 yandex_station:
   include:
     - "Конвектор Ванна 1 этаж"
     - "Конвектор Ванна 2 этаж"
+    - "Дренажный насос"
 
 # Text to speech
 tts:
@@ -337,6 +338,21 @@ sensor:
           friendly_name: "Конвактор ванна 2 потребление"
           device_class: power
           value_template: "{{state_attr('switch.konvektor_vanna_2_etazh', 'power')}}"
+          unit_of_measurement: 'Вт'
+      drenazhnyi_nasos_voltage:
+          friendly_name: "Конвактор ванна 2 напряжене"
+          device_class: voltage
+          value_template: "{{state_attr('switch.drenazhnyi_nasos', 'voltage')}}"
+          unit_of_measurement: 'V'
+      drenazhnyi_nasos_current:
+          friendly_name: "Конвактор ванна 2 сила тока"
+          device_class: current
+          value_template: "{{state_attr('switch.drenazhnyi_nasos', 'amperage')}}"
+          unit_of_measurement: 'A'
+      drenazhnyi_nasos_power:
+          friendly_name: "Конвактор ванна 2 потребление"
+          device_class: power
+          value_template: "{{state_attr('switch.drenazhnyi_nasos', 'power')}}"
           unit_of_measurement: 'Вт'
   
   - platform: filter
