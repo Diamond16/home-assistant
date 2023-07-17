@@ -446,64 +446,58 @@ sensor:
 #                                                  #
 ####################################################
 
-switch:
-  # - platform: mqtt
-  #   name: MQTT heater
-  #   icon: "mdi:radiator"
-  #   state_topic: "megad/14/8"
-  #   value_template: "{{ value_json.value }}"
-  #   command_topic: "megad/14/cmd"
-  #   payload_on: "8:1"
-  #   payload_off: "8:0"
-  #   state_on: "ON"
-  #   state_off: "OFF"
-
-  - platform: command_line
-    switches:
-      p7_heater:
-        friendly_name: "Конвектор в бойлерной"
-        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=7:1'"
-        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=7:0'"
-        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=get'"
-        value_template: "{{ value == 'ON' }}"
-        #command_state: "/bin/cat './downloads/megad.state'"
-        #value_template: "{{ value.split(";")[7] == "ON" }}"
-      p8_boiler:
-        friendly_name: "Бойлер 150л"
-        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=8:1'"
-        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=8:0'"
-        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=get'"
-        value_template: "{{ value == 'ON' }}"
-      p9_sauna:
-        friendly_name: "Сауна"
-        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=9:1'"
-        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=9:0'"
-        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=get'"
-        value_template: "{{ value == 'ON' }}"
-      p10_warm_floor:
-        friendly_name: "Теплый пол"
-        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=10:0'"
-        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=10:1'"
-        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=get'"
-        value_template: "{{ value == 'OFF' }}"
-      p11_heater_kate:
-        friendly_name: "Конвектор у Кати в комнате"
-        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=11:1'"
-        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=11:0'"
-        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=get'"
-        value_template: "{{ value == 'ON' }}"
-      p12_heater_alisa:
-        friendly_name: "Конвектор у Алисы в комнате"
-        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=12:1'"
-        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=12:0'"
-        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=get'"
-        value_template: "{{ value == 'ON' }}"
-      p13_heater_guest1:
-        friendly_name: "Конвектор у Бабушки в комнате"
-        command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=13:1'"
-        command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=13:0'"
-        command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=get'"
-        value_template: "{{ value == 'ON' }}"
+command_line:
+  - switch:
+      unique_id: p7_heater
+      name: "Конвектор в бойлерной"
+      command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=7:1'"
+      command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=7:0'"
+      command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=7&cmd=get'"
+      value_template: "{{ value == 'ON' }}"
+      #command_state: "/bin/cat './downloads/megad.state'"
+      #value_template: "{{ value.split(";")[7] == "ON" }}"
+  - switch:
+      unique_id: p8_boiler
+      name: "Бойлер 150л"
+      command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=8:1'"
+      command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=8:0'"
+      command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=8&cmd=get'"
+      value_template: "{{ value == 'ON' }}"
+  - switch:
+      unique_id: p9_sauna
+      name: "Сауна"
+      command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=9:1'"
+      command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=9:0'"
+      command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=9&cmd=get'"
+      value_template: "{{ value == 'ON' }}"
+  - switch:
+      unique_id: p10_warm_floor
+      name: "Теплый пол"
+      command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=10:0'"
+      command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=10:1'"
+      command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=get'"
+      value_template: "{{ value == 'OFF' }}"
+  - switch:
+      unique_id: p11_heater_kate
+      name: "Конвектор у Кати в комнате"
+      command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=11:1'"
+      command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=11:0'"
+      command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=11&cmd=get'"
+      value_template: "{{ value == 'ON' }}"
+  - switch:
+      unique_id: p12_heater_alisa
+      name: "Конвектор у Алисы в комнате"
+      command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=12:1'"
+      command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=12:0'"
+      command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=12&cmd=get'"
+      value_template: "{{ value == 'ON' }}"
+  - switch:
+      unique_id: p13_heater_guest1
+      name: "Конвектор у Бабушки в комнате"
+      command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=13:1'"
+      command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=13:0'"
+      command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=13&cmd=get'"
+      value_template: "{{ value == 'ON' }}"
 
 input_number:
   day_temp:
