@@ -520,7 +520,8 @@ input_number:
 climate:
   - platform: generic_thermostat
     name: termostat_sauna
-    heater: switch.p9_sauna
+    unique_id: termostat_sauna
+    heater: switch.sauna
     target_sensor: sensor.p14_ds18b20wp_temp
     min_temp: 30
     max_temp: 110
