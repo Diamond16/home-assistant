@@ -472,7 +472,7 @@ command_line:
       value_template: "{{ value == 'ON' }}"
   - switch:
       unique_id: p10_warm_floor
-      name: "Теплый пол"
+      name: p10_warm_floor
       command_on: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=10:0'"
       command_off: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=10:1'"
       command_state: "/usr/bin/curl -X GET 'http://192.168.1.14:80/sec/?pt=10&cmd=get'"
